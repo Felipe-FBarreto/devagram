@@ -3,4 +3,5 @@ export type CadastroUsuario = {
   email: string;
   senha: string;
   id?: string;
+  avatar?: string;
 };

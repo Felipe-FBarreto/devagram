@@ -1,51 +1,52 @@
-import { conectarMongoDB } from "./../../middlewares/conectarMongoDB";
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { RespostaPadraoMsg } from "../../types/RespostaPadraoMsg";
-import type { CadastroUsuario } from "../../types/cadastroUsuario";
-import { UsuarioModel } from "../../models/UsuarioModel";
+import { RespostaPadraoMsg } from "../../types/RespostaPadraoMsg";
+import { CadastroUsuario } from "../../types/cadastroUsuario";
 import md5 from "md5";
+import { UsuarioModel } from "@/models/UsuarioModel";
+import { conectarMongoDB } from "@/middlewares/conectarMongoDB";
 
-const endpointCadastro = async (
+const endPointCadastro = async (
   req: NextApiRequest,
-  res: NextApiResponse<RespostaPadraoMsg>,
+  res: NextApiResponse<RespostaPadraoMsg | CadastroUsuario>,
 ) => {
   if (req.method === "POST") {
-    const usuario = req.body as CadastroUsuario;
+    const { nome, email, senha } = req.body as CadastroUsuario;
 
-    if (!usuario.nome || usuario.nome.length < 2) {
+    if (!nome || nome.length < 2) {
       return res.status(400).json({ error: "Nome inválido" });
     }
 
-    if (!usuario.email || usuario.email.length < 5) {
+    if (!email || email.length < 5) {
       return res.status(400).json({ error: "Email inválido" });
     }
 
-    if (!usuario.senha || usuario.senha.length < 4) {
+    if (!senha || senha.length < 4) {
       return res.status(400).json({ error: "Senha inválido" });
     }
 
-    const validateUserDouble: CadastroUsuario[] = await UsuarioModel.find({
-      email: usuario.email,
-    });
-
-    if (validateUserDouble && validateUserDouble.length > 0) {
-      return res.status(400).json({
-        message: "Email já cadastrado",
-      });
-    }
-
-    const usuarioCript: CadastroUsuario = {
-      nome: usuario.nome,
-      email: usuario.email,
-      senha: md5(usuario.senha),
+    const usuarioCriptografado: CadastroUsuario = {
+      nome,
+      email,
+      senha: md5(senha),
     };
 
-    await UsuarioModel.create(usuarioCript);
-    return res.status(200).json({ message: "Usuario cadastrado com sucesso" });
+    const validacaoUsuario: CadastroUsuario[] = await UsuarioModel.find({
+      email: email,
+    });
+
+    if (validacaoUsuario && validacaoUsuario.length > 0) {
+      return res.status(400).json({ error: "Email já cadastrado" });
+    }
+
+    await UsuarioModel.create(usuarioCriptografado);
+    return res.status(200).json({
+      message: "Usuário cadastrado com sucesso",
+    });
   }
-  return res.status(405).json({
-    message: "Metodo para request não valido, por favor ler a documentação",
-  });
+
+  return res
+    .status(405)
+    .json({ error: "O metodo informado para a requisição esta invádio" });
 };
 
-export default conectarMongoDB(endpointCadastro);
+export default conectarMongoDB(endPointCadastro);

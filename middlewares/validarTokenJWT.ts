@@ -52,4 +52,5 @@ export const validarTokenJWT =
         .status(401)
         .json({ error: "Não foi possível validar o token de acesso" });
     }
+    return handler(req, res);
   };

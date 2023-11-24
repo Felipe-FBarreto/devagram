@@ -6,16 +6,11 @@ import { validarTokenJWT } from "@/middlewares/validarTokenJWT";
 import { conectarMongoDB } from "@/middlewares/conectarMongoDB";
 import { PublicacaoModel } from "@/models/PublicacaoModel";
 import { UsuarioModel } from "@/models/UsuarioModel";
-console.log("111");
 
 const handler = nc()
   .use(upload.single("file"))
   .post(async (req: any, res: NextApiResponse<RespostaPadraoMsg>) => {
-    console.log("222");
-
     try {
-      console.log("333");
-
       const { userId } = req.query;
       const usuario = await UsuarioModel.findById(userId);
 
@@ -44,11 +39,9 @@ const handler = nc()
         data: new Date(),
       };
       await PublicacaoModel.create(publicacao);
-      console.log("44");
 
       return res.status(200).json({ message: "Publicação criada com sucesso" });
     } catch (e) {
-      console.log("🚀 ~ file: publicacao.ts:44 ~ .post ~ e:", e);
       return res
         .status(400)
         .json({ error: `Erro ao cadastrar uma publicação ${e} ` });
@@ -58,7 +51,6 @@ const handler = nc()
 export const config = {
   api: {
     bodyParser: false,
-    externalResolver: true,
   },
 };
 

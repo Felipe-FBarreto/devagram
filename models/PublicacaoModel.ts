@@ -9,5 +9,15 @@ const PublicacaoSchema = new Schema({
   likes: { type: Array, default: [] },
 });
 
+export interface IPublicacao {
+  idUsuario: string;
+  descricao: string;
+  foto: string;
+  data: Date;
+  comentario: Array<any>;
+  likes: Array<any>;
+  id: string;
+}
+
 export const PublicacaoModel =
   mongoose.models.publicacao || mongoose.model("publicacao", PublicacaoSchema);

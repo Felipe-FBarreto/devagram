@@ -12,16 +12,26 @@ const endPointPesquisa = async (
     if (req.method === "GET") {
       const { filtro } = req.query;
 
-      if (!filtro || filtro.length < 2) {
-        return res
-          .status(400)
-          .json({ error: "Necessário pelo menos 2 parametros" });
-      }
-      const usuarioEncontrado = await UsuarioModel.find({
-        $or: [{ nome: { $regex: filtro, $options: "i" } }],
-      });
+      if (req.query.id) {
+        const usuarioEncontrado = await UsuarioModel.findById(req.query.id);
 
-      return res.status(200).json(usuarioEncontrado);
+        if (!usuarioEncontrado) {
+          return res.status(400).json({ error: "Usuario não encontraodo" });
+        }
+        usuarioEncontrado.senha = null;
+        return res.status(200).json(usuarioEncontrado);
+      } else {
+        if (!filtro || filtro.length < 2) {
+          return res
+            .status(400)
+            .json({ error: "Necessário pelo menos 2 parametros" });
+        }
+        const usuarioEncontrado = await UsuarioModel.find({
+          $or: [{ nome: { $regex: filtro, $options: "i" } }],
+        });
+
+        return res.status(200).json(usuarioEncontrado);
+      }
     }
 
     return res.status(400).json({ error: "Metódo informado inválido" });

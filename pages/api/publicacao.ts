@@ -6,6 +6,7 @@ import { validarTokenJWT } from "@/middlewares/validarTokenJWT";
 import { conectarMongoDB } from "@/middlewares/conectarMongoDB";
 import { PublicacaoModel } from "@/models/PublicacaoModel";
 import { UsuarioModel } from "@/models/UsuarioModel";
+import { SeguidorModel } from "@/models/SeguidorModel";
 
 const handler = nc()
   .use(upload.single("file"))
@@ -38,6 +39,8 @@ const handler = nc()
         foto: image?.media?.url,
         data: new Date(),
       };
+      usuario.publicacoes++;
+      await SeguidorModel.findByIdAndUpdate({ _id: usuario._id }, usuario);
       await PublicacaoModel.create(publicacao);
 
       return res.status(200).json({ message: "Publicação criada com sucesso" });

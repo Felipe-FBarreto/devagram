@@ -17,7 +17,6 @@ const likeEndPoint = async (
         return res.status(400).json({ error: "Publicação não encontrada" });
       }
       const { userId } = req.query;
-      console.log("🚀 ~ file: like.ts:20 ~ userId:", userId);
       const usuario = await UsuarioModel.findById(userId);
       if (!usuario) {
         return res.status(400).json({ error: "Usuário não encontrado" });

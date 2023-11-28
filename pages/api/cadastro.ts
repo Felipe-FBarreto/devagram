@@ -1,3 +1,4 @@
+import { policaCORS } from "./../../middlewares/politicaCORS";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { RespostaPadraoMsg } from "../../types/RespostaPadraoMsg";
 import { CadastroUsuario } from "../../types/cadastroUsuario";
@@ -63,4 +64,4 @@ export const config = {
   },
 };
 
-export default conectarMongoDB(handler);
+export default policaCORS(conectarMongoDB(handler));

@@ -1,3 +1,4 @@
+import { policaCORS } from "./../../middlewares/politicaCORS";
 import { conectarMongoDB } from "@/middlewares/conectarMongoDB";
 import { validarTokenJWT } from "@/middlewares/validarTokenJWT";
 import { PublicacaoModel } from "@/models/PublicacaoModel";
@@ -70,4 +71,4 @@ const feedEndPoint = async (
   }
 };
 
-export default validarTokenJWT(conectarMongoDB(feedEndPoint));
+export default policaCORS(validarTokenJWT(conectarMongoDB(feedEndPoint)));

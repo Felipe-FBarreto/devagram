@@ -1,3 +1,4 @@
+import { policaCORS } from "./../../middlewares/politicaCORS";
 import { conectarMongoDB } from "@/middlewares/conectarMongoDB";
 import { validarTokenJWT } from "@/middlewares/validarTokenJWT";
 import { UsuarioModel } from "@/models/UsuarioModel";
@@ -91,4 +92,4 @@ export const config = {
   },
 };
 
-export default validarTokenJWT(conectarMongoDB(handler));
+export default policaCORS(validarTokenJWT(conectarMongoDB(handler)));

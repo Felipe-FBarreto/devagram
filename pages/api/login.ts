@@ -1,3 +1,4 @@
+import { policaCORS } from "./../../middlewares/politicaCORS";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { RespostaPadraoMsg } from "@/types/RespostaPadraoMsg";
 import { conectarMongoDB } from "@/middlewares/conectarMongoDB";
@@ -47,4 +48,4 @@ const endPointLogin = async (
     .json({ error: "O metodo informado para a requisição esta invádio" });
 };
 
-export default conectarMongoDB(endPointLogin);
+export default policaCORS(conectarMongoDB(endPointLogin));

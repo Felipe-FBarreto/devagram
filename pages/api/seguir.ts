@@ -1,3 +1,4 @@
+import { policaCORS } from "./../../middlewares/politicaCORS";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { conectarMongoDB } from "../../middlewares/conectarMongoDB";
 import { validarTokenJWT } from "../../middlewares/validarTokenJWT";
@@ -88,4 +89,4 @@ const endpointSeguir = async (
   }
 };
 
-export default validarTokenJWT(conectarMongoDB(endpointSeguir));
+export default policaCORS(validarTokenJWT(conectarMongoDB(endpointSeguir)));

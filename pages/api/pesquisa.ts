@@ -1,3 +1,4 @@
+import { policaCORS } from "./../../middlewares/politicaCORS";
 import { validarTokenJWT } from "@/middlewares/validarTokenJWT";
 import { RespostaPadraoMsg } from "./../../types/RespostaPadraoMsg";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -41,4 +42,4 @@ const endPointPesquisa = async (
   }
 };
 
-export default validarTokenJWT(conectarMongoDB(endPointPesquisa));
+export default policaCORS(validarTokenJWT(conectarMongoDB(endPointPesquisa)));
